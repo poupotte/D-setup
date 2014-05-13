@@ -6,14 +6,13 @@ def update_1(domain):
     update_home()
 
 @task
-def update_certificate(domain):
+def regenerate_public_certificate(domain):
     with cd('/etc/cozy/'):
-        sudo('openssl genrsa -out server.key 2048')
         sudo('openssl req -new -key server.key -out server.csr %s'%domain)
         sudo('openssl x509 -req -days 3650 -in server.csr -signkey server.key -out server.crt')
         sudo('rm server.csr')
-        sudo('chown root:root server.key chmod 440 server.key ')
-    print(green('Certificate generated for %s' % domain))
+        sudo('chown root:root server.key; chmod 440 server.key')
+    print(green('CSR generated and self-signed for %s' % domain))
 
 
 @task
