@@ -4,8 +4,8 @@
 
 @task
 def update_1(domain):
-    update_certificate(domain)
-    update_domain(domain)
+    regenerate_public_certificate(domain)
+    set_domain(domain)
     update_home()
 
 @task
@@ -21,7 +21,7 @@ def regenerate_public_certificate(domain):
 
 
 @task
-def update_domain(domain):    
+def set_domain(domain):    
     with cd('/usr/local/cozy/apps/home/home/digidisk-files/'):
         cozydo('coffee commands setdomain %s' % domain)
     print(green('Domain set to: %s' % domain))
