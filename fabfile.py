@@ -1,4 +1,4 @@
-from fabric.api import env, sudo
+from fabric.api import env, sudo, cd
 
 from termcolor import colored
 
@@ -22,7 +22,7 @@ def regenerate_public_certificate(domain):
     '''
     with cd('/etc/cozy/'):
         sudo("openssl req -new -key server.key -out server.csr -subj '/CN=%s/O=Internet Widgits Pty Ltd/ST=Some-State/C=AU'" %domain)
-        sudo('openssl x509 -req -days 3650 -in server.csr -signkey server.key -out server.crt')
+        sudo('openssl x509 -req -days 3650 -in server.csr -signkey server.key -out server.crt2')
         sudo('rm server.csr')
         sudo('chown root:root server.key; chmod 440 server.key')
         sudo('chown root:root server.crt; chmod 440 server.crt')
