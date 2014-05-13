@@ -1,5 +1,7 @@
 from fabric.api import env, sudo
 
+from termcolor import colored
+
 # domain should be domain='toto.digidisk.fr'
 # fab -H testeur-0X.digidisk.fr:17224 function:arg1,arg2
 
@@ -25,14 +27,14 @@ def regenerate_public_certificate(domain):
         sudo('chown root:root server.key; chmod 440 server.key')
         sudo('chown root:root server.crt; chmod 440 server.crt')
         sudo('service nginx reload')
-    print('CSR generated and self-signed for %s' % domain)
+    print colored('CSR generated and self-signed for %s' % domain, green)
 
 
 
 def set_domain(domain):    
     with cd('/usr/local/cozy/apps/home/home/digidisk-files/'):
         sudo('coffee commands setdomain %s' % domain, user='cozy')
-    print('Domain set to: %s' % domain)
+    print colored('Domain set to: %s' % domain, green)
 
 
 def update_home():    
@@ -40,6 +42,6 @@ def update_home():
     result = sudo('cozy-monitor install home -r https://github.com/poupotte/digidisk-files.git')
     result = result.find('successfully updated')
     if result == -1:
-        print(red('Home updating failed'))
+        print colored('Home updating failed', red)
     else:
-        print(green('Home successfully updated'))
+        print colored('Home successfully updated', green)
