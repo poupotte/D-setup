@@ -27,14 +27,14 @@ def regenerate_public_certificate(domain):
         sudo('chown root:root server.key; chmod 440 server.key')
         sudo('chown root:root server.crt; chmod 440 server.crt')
         sudo('service nginx reload')
-    print colored('CSR generated and self-signed for %s' % domain, green)
+    print colored('CSR generated and self-signed for %s' % domain, 'green')
 
 
 
 def set_domain(domain):    
     with cd('/usr/local/cozy/apps/home/home/digidisk-files/'):
-        sudo('coffee commands setdomain %s' % domain, user='cozy')
-    print colored('Domain set to: %s' % domain, green)
+        sudo('coffee commands.coffee setdomain %s' % domain, user='cozy')
+    print colored('Domain set to: %s' % domain, 'green')
 
 
 def update_home():    
@@ -42,6 +42,6 @@ def update_home():
     result = sudo('cozy-monitor install home -r https://github.com/poupotte/digidisk-files.git')
     result = result.find('successfully updated')
     if result == -1:
-        print colored('Home updating failed', red)
+        print colored('Home updating failed', 'red')
     else:
-        print colored('Home successfully updated', green)
+        print colored('Home successfully updated', 'green')
