@@ -2,6 +2,10 @@ from fabric.api import env, sudo, cd
 
 from termcolor import colored
 
+'''
+Utilities to manage digidisk trough ssh
+'''
+
 # domain should be domain='toto.digidisk.fr'
 # fab -H testeur-0X.digidisk.fr:17224 function:arg1,arg2
 
