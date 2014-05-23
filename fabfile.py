@@ -8,6 +8,7 @@ Utilities to manage digidisk trough ssh
 
 # domain should be domain='toto.digidisk.fr'
 # fab -H testeur-0X.digidisk.fr:17224 function:arg1,arg2
+# fab -H testeur-0X.digidisk.fr:17224 set_domain:testeur-0X.digidisk.fr
 
 env.user = 'cubie'
 
@@ -48,4 +49,14 @@ def update_home():
     if result == -1:
         print colored('Proxy updating failed', 'red')
     else:
+
         print colored('Proxy successfully updated', 'green')
+
+
+
+
+def whereami():
+    sudo('uname -a')
+    sudo('hostname')
+
+
