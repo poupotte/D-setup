@@ -41,8 +41,7 @@ def set_domain(domain):
     print colored('Domain set to: %s' % domain, 'green')
 
 
-def update_home():    
-    sudo('cozy-monitor uninstall home')
+def update_proxy():    
     result = sudo('cozy-monitor install proxy -r https://gitlab.cozycloud.cc/cozy/digidisk-proxy.git')
     result = result.find('successfully updated')
     if result == -1:
