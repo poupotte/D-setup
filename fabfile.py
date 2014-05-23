@@ -14,7 +14,7 @@ env.user = 'cubie'
 def update_1(domain):
     regenerate_public_certificate(domain)
     set_domain(domain)
-    update_home()
+    update_proxy()
 
 
 
@@ -43,9 +43,9 @@ def set_domain(domain):
 
 def update_home():    
     sudo('cozy-monitor uninstall home')
-    result = sudo('cozy-monitor install home -r https://github.com/poupotte/digidisk-files.git')
+    result = sudo('cozy-monitor install proxy -r https://gitlab.cozycloud.cc/cozy/digidisk-proxy.git')
     result = result.find('successfully updated')
     if result == -1:
-        print colored('Home updating failed', 'red')
+        print colored('Proxy updating failed', 'red')
     else:
-        print colored('Home successfully updated', 'green')
+        print colored('Proxy successfully updated', 'green')
