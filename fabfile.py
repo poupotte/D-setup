@@ -44,7 +44,7 @@ def set_domain(domain):
 
 def update_proxy():    
     result = sudo('cozy-monitor install proxy -r https://gitlab.cozycloud.cc/cozy/digidisk-proxy.git')
-    result = result.find('successfully updated')
+    result = result.find('successfully installed')
     if result == -1:
         print colored('Proxy updating failed', 'red')
     else:
