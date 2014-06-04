@@ -51,7 +51,7 @@ def first_update_proxy():
 
         print colored('Proxy successfully updated', 'green')
 
-<<<<<<< HEAD
+
 
 
 
@@ -60,7 +60,7 @@ def whereami():
     sudo('hostname')
 
 
-=======
+
 def first_update_home():
     result = sudo('cozy-monitor install home -r https://gitlab.cozycloud.cc/cozy/digidisk-files.git')
     result = result.find('successfully installed')
@@ -100,4 +100,4 @@ def update_data_system():
         print colored('Data-system updating failed', 'red')
     else:
         print colored('Data-system successfully updated', 'green')
->>>>>>> fc212400dbecb819fd3ed92f719857001faf1240
+
