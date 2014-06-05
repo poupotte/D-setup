@@ -78,7 +78,7 @@ def first_update_data_system():
         print colored('Data-system successfully updated', 'green')
 
 def update_proxy():
-    result = sudo('cozy-monitor update proxy -r https://gitlab.cozycloud.cc/cozy/digidisk-proxy.git')
+    result = sudo('cozy-monitor update proxy https://gitlab.cozycloud.cc/cozy/digidisk-proxy.git')
     result = result.find('successfully updated')
     if result == -1:
         print colored('Proxy updating failed', 'red')
@@ -86,7 +86,7 @@ def update_proxy():
         print colored('Proxy successfully updated', 'green')
 
 def update_home():
-    result = sudo('cozy-monitor update home -r https://gitlab.cozycloud.cc/cozy/digidisk-files.git')
+    result = sudo('cozy-monitor update home https://gitlab.cozycloud.cc/cozy/digidisk-files.git')
     result = result.find('successfully updated')
     if result == -1:
         print colored('Home updating failed', 'red')
@@ -94,7 +94,7 @@ def update_home():
         print colored('Home successfully updated', 'green')
 
 def update_data_system():
-    result = sudo('cozy-monitor update data-system -r https://gitlab.cozycloud.cc/cozy/digidisk-data-system.git')
+    result = sudo('cozy-monitor update data-system https://gitlab.cozycloud.cc/cozy/digidisk-data-system.git')
     result = result.find('successfully updated')
     if result == -1:
         print colored('Data-system updating failed', 'red')
