@@ -12,10 +12,7 @@ Utilities to manage digidisk trough ssh
 
 env.user = 'cubie'
 
-def update_1(domain):
-    regenerate_public_certificate(domain)
-    set_domain(domain)
-    first_update_proxy()
+## Configuration
 
 def regenerate_public_certificate(domain):
     '''
@@ -32,64 +29,149 @@ def regenerate_public_certificate(domain):
         sudo('service nginx reload')
     print colored('CSR generated and self-signed for %s' % domain, 'green')
 
-
-
 def set_domain(domain):    
     with cd('/usr/local/cozy/apps/home/home/digidisk-files/'):
         sudo('coffee commands.coffee setdomain %s' % domain, user='cozy')
     print colored('Domain set to: %s' % domain, 'green')
 
+def set_gitlab_ids(username, password):
+    require.files.file(
+        path='/etc/cozy/gitlab.login',
+        contents=username + '\n' + password,
+        use_sudo=True,
+        owner='root',
+        mode='700'
+    )
 
-def first_update_proxy(username, password):
-    result = sudo('cozy-monitor install proxy -r https://%s:%s@gitlab.cozycloud.cc/cozy/digidisk-proxy.git' %(username, password))
+def install_imagemagick():
+    """ TODOS :
+        check if works on cubie
+    """
+    deb.update_index()
+    deb.upgrade()
+    require.deb.packages([
+        'imagemagick'
+    ])
+
+
+## Installation
+
+def install_proxy():
+    result = sudo('cozy-monitor install proxy')
     result = result.find('successfully installed')
     if result == -1:
         print colored('Proxy updating failed', 'red')
     else:
 
-        print colored('Proxy successfully updated', 'green')
+        print colored('Proxy successfully installed', 'green')
 
-def whereami():
-    sudo('uname -a')
-    sudo('hostname')
-
-def first_update_home(username, password):
-    result = sudo('cozy-monitor install home -r https://%s:%s@gitlab.cozycloud.cc/cozy/digidisk-files.git' %(username, password))
+def install_home():
+    result = sudo('cozy-monitor install home')
     result = result.find('successfully installed')
     if result == -1:
         print colored('Home updating failed', 'red')
     else:
-        print colored('Home successfully updated', 'green')
+        print colored('Home successfully installed', 'green')
 
-def first_update_data_system(username, password):
-    result = sudo('cozy-monitor install data-system -r https://%s:%s@gitlab.cozycloud.cc/cozy/digidisk-data-system.git' %(username, password))
+def install_data_system():
+    result = sudo('cozy-monitor install data-system')
     result = result.find('successfully installed')
     if result == -1:
         print colored('Data-system updating failed', 'red')
     else:
-        print colored('Data-system successfully updated', 'green')
+        print colored('Data-system successfully installed', 'green')
 
-def update_proxy(username, password):
-    result = sudo('cozy-monitor update proxy https://%s:%s@gitlab.cozycloud.cc/cozy/digidisk-proxy.git' %(username, password))
+def install_photo():
+    result = sudo('cozy-monitor install photos')
+    result = result.find('successfully installed')
+    if result == -1:
+        print colored('Photo updating failed', 'red')
+    else:
+        print colored('Photo successfully installed', 'green')
+
+def install_contacts():
+    result = sudo('cozy-monitor install contacts')
+    result = result.find('successfully installed')
+    if result == -1:
+        print colored('Contact updating failed', 'red')
+    else:
+        print colored('Contact successfully installed', 'green')
+
+def install_stack():
+    result = sudo('cozy-monitor install proxy')
+    result = result.find('successfully installed')
+    if result == -1:
+        print colored('Proxy installing failed', 'red')
+    else:
+        result = sudo('cozy-monitor install home')
+        result = result.find('successfully installed')
+        if result == -1:
+            print colored('Home installing failed', 'red')
+        else:
+            result = sudo('cozy-monitor install data-system')
+            result = result.find('successfully installed')
+            if result == -1:
+                print colored('Data-system installing failed', 'red')
+            else:
+                print colored('Stack successfully installed', 'green')
+
+
+## Update
+
+def update_proxy(branch):
+    result = sudo('cozy-monitor update proxy %s' %branch )
     result = result.find('successfully updated')
     if result == -1:
         print colored('Proxy updating failed', 'red')
     else:
         print colored('Proxy successfully updated', 'green')
 
-def update_home(username, password):
-    result = sudo('cozy-monitor update home https://%s:%s@gitlab.cozycloud.cc/cozy/digidisk-files.git' %(username, password))
+def update_home(branch):
+    result = sudo('cozy-monitor update home %s' %branch )
     result = result.find('successfully updated')
     if result == -1:
         print colored('Home updating failed', 'red')
     else:
         print colored('Home successfully updated', 'green')
 
-def update_data_system(username, password):
-    result = sudo('cozy-monitor update data-system https://%s:%s@gitlab.cozycloud.cc/cozy/digidisk-data-system.git' %(username, password))
+def update_data_system(branch):
+    result = sudo('cozy-monitor update data-system %s' %branch )
     result = result.find('successfully updated')
     if result == -1:
         print colored('Data-system updating failed', 'red')
     else:
         print colored('Data-system successfully updated', 'green')
 
+def update_photos(branch):
+    result = sudo('cozy-monitor update photos %s' %branch )
+    result = result.find('successfully updated')
+    if result == -1:
+        print colored('Photo updating failed', 'red')
+    else:
+        print colored('Photo successfully updated', 'green')
+
+def update_contacts(branch):
+    result = sudo('cozy-monitor update contacts %s' %branch )
+    result = result.find('successfully updated')
+    if result == -1:
+        print colored('Contact updating failed', 'red')
+    else:
+        print colored('Contact successfully updated', 'green')
+
+def update_stack_master():
+    result = sudo('cozy-monitor update proxy master')
+    result = result.find('successfully updated')
+    if result == -1:
+        print colored('Proxy updating failed', 'red')
+    else:
+        result = sudo('cozy-monitor update home master')
+        result = result.find('successfully updated')
+        if result == -1:
+            print colored('Home updating failed', 'red')
+        else:
+            result = sudo('cozy-monitor update data-system master')
+            result = result.find('successfully updated')
+            if result == -1:
+                print colored('Data-system updating failed', 'red')
+            else:
+                print colored('Stack successfully updated', 'green')
