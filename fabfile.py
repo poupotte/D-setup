@@ -1,6 +1,8 @@
-from fabric.api import env, sudo, cd
-
+from fabric.api import env, sudo, run, cd
+from fabtools import require
 from termcolor import colored
+from fabtools.require import file as require_file
+from fabric.context_managers import hide
 
 '''
 Utilities to manage digidisk trough ssh
@@ -10,7 +12,7 @@ Utilities to manage digidisk trough ssh
 # fab -H testeur-0X.digidisk.fr:17224 function:arg1,arg2
 # fab -H testeur-0X.digidisk.fr:17224 set_domain:testeur-0X.digidisk.fr
 
-env.user = 'cubie'
+env.user = 'root'
 
 ## Configuration
 
@@ -175,3 +177,78 @@ def update_stack_master():
                 print colored('Data-system updating failed', 'red')
             else:
                 print colored('Stack successfully updated', 'green')
+
+def update_version_contacts(username, password):
+    # Update monitor
+    with cd('/usr/local/lib/node_modules'):
+        sudo('rm -rf cozy-monitor')
+        sudo('git clone https://github.com/poupotte/cozy-monitor.git')
+        with cd('/usr/local/lib/node_modules/cozy-monitor'):
+            sudo('git checkout -b feature/without-home origin/feature/without-home')
+            sudo('npm install')
+    # Create file for gitlab login
+    set_gitlab_ids(username, password)
+    # Update data-system
+    sudo('cozy-monitor install data-system -b feature/contacts')
+    # Update home
+    sudo('cozy-monitor install home -b feature/contacts')
+    # Update proxy
+    sudo('cozy-monitor install proxy -b feature/contacts')
+    # Install contacts
+    sudo('cozy-monitor install contacts')
+    # Restart all apps
+    sudo('cozy-monitor restart data-system')
+    sudo('cozy-monitor restart home')
+    sudo('cozy-monitor restart proxy')
+    sudo('cozy-monitor restart contacts')
+    # Check Contacts    
+    with hide('running', 'stdout'):
+        result = run('curl http://localhost:9114')    
+    result = result.find('Digidisk - Contacts')
+    if result == -1:
+        print colored('Contact installing failed', 'red')
+    else:
+        print colored('Stack successfully updated', 'green')
+
+def update_version_photos(username, password):
+    # Update monitor
+    with cd('/usr/local/lib/node_modules'):
+        sudo('rm -rf cozy-monitor')
+        sudo('git clone https://github.com/poupotte/cozy-monitor.git')
+        with cd('/usr/local/lib/node_modules/cozy-monitor'):
+            sudo('git checkout -b feature/without-home origin/feature/without-home')
+            sudo('npm install')
+    # Create file for gitlab login
+    set_gitlab_ids(username, password)
+    # Update data-system
+    sudo('cozy-monitor install data-system -b feature/photos')
+    # Update home
+    sudo('cozy-monitor install home -b feature/photos')
+    # Update proxy
+    sudo('cozy-monitor install proxy -b feature/contacts')
+    # Install contacts
+    sudo('cozy-monitor install contacts -b photos')
+    # Install photos
+    sudo('cozy-monitor install photos')
+    # Restart all apps
+    sudo('cozy-monitor restart data-system')
+    sudo('cozy-monitor restart home')
+    sudo('cozy-monitor restart proxy')
+    sudo('cozy-monitor restart contacts')
+    sudo('cozy-monitor restart photos')
+    # Check Contacts
+    with hide('running', 'stdout'):
+        result = run('curl http://localhost:9114')
+    result = result.find('Digidisk - Contacts')
+    if result == -1:
+        print colored('Contact installing failed', 'red')
+    else:
+        # Check Photos
+        with hide('running', 'stdout'):
+            result = run('curl http://localhost:9119')
+        result = result.find('Digidisk - Photos')
+        if result == -1:
+            print colored('Photo installing failed', 'red')
+        else:
+            print colored('Stack successfully updated', 'green')
+    
