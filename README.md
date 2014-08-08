@@ -1,4 +1,4 @@
-digidisk-setup
+D-setup
 ==============
 
 == 
