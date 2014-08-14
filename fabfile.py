@@ -229,7 +229,7 @@ def update_version_photos(username, password):
     # Install contacts
     sudo('cozy-monitor install contacts -b photos')
     # Install photos
-    sudo('cozy-monitor install photos')
+    sudo('cozy-monitor install photos -b feature/photos')
     # Restart all apps
     sudo('cozy-monitor restart data-system')
     sudo('cozy-monitor restart home')
@@ -250,5 +250,6 @@ def update_version_photos(username, password):
         if result == -1:
             print colored('Photo installing failed', 'red')
         else:
+            run('cozy-monitor status')
             print colored('Stack successfully updated', 'green')
     
