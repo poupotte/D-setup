@@ -286,7 +286,7 @@ def update_version_photos_home(username, password):
             run('cozy-monitor status')
             print colored('Stack successfully updated', 'green')
 
-def update_version_photos(username, password):
+def update_version_photos_proxy(username, password):
     # Update proxy
     sudo('cozy-monitor install proxy -b feature/contacts')
     # Install contacts
