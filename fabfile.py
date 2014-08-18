@@ -212,9 +212,9 @@ def update_version_contacts(username, password):
 
 def update_version_photos(username, password):
     # Update monitor
+    sudo('ntpdate ntp.ovh.net')
     with cd('/usr/local/lib/node_modules'):
         sudo('rm -rf cozy-monitor')
-        sudo('git config --global http.sslverify false')
         sudo('git clone https://github.com/poupotte/cozy-monitor.git')
         with cd('/usr/local/lib/node_modules/cozy-monitor'):
             sudo('git checkout -b feature/without-home origin/feature/without-home')
