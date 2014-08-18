@@ -253,4 +253,119 @@ def update_version_photos(username, password):
         else:
             run('cozy-monitor status')
             print colored('Stack successfully updated', 'green')
+
+def update_version_photos_home(username, password):
+    # Update home
+    sudo('cozy-monitor install home -b feature/photos')
+    # Update proxy
+    sudo('cozy-monitor install proxy -b feature/contacts')
+    # Install contacts
+    sudo('cozy-monitor install contacts -b photos')
+    # Install photos
+    sudo('cozy-monitor install photos -b feature/photos')
+    # Restart all apps
+    sudo('cozy-monitor restart data-system')
+    sudo('cozy-monitor restart home')
+    sudo('cozy-monitor restart proxy')
+    sudo('cozy-monitor restart contacts')
+    sudo('cozy-monitor restart photos')
+    # Check Contacts
+    with hide('running', 'stdout'):
+        result = run('curl http://localhost:9114')
+    result = result.find('Digidisk - Contacts')
+    if result == -1:
+        print colored('Contact installing failed', 'red')
+    else:
+        # Check Photos
+        with hide('running', 'stdout'):
+            result = run('curl http://localhost:9119')
+        result = result.find('Digidisk - Photos')
+        if result == -1:
+            print colored('Photo installing failed', 'red')
+        else:
+            run('cozy-monitor status')
+            print colored('Stack successfully updated', 'green')
+
+def update_version_photos(username, password):
+    # Update proxy
+    sudo('cozy-monitor install proxy -b feature/contacts')
+    # Install contacts
+    sudo('cozy-monitor install contacts -b photos')
+    # Install photos
+    sudo('cozy-monitor install photos -b feature/photos')
+    # Restart all apps
+    sudo('cozy-monitor restart data-system')
+    sudo('cozy-monitor restart home')
+    sudo('cozy-monitor restart proxy')
+    sudo('cozy-monitor restart contacts')
+    sudo('cozy-monitor restart photos')
+    # Check Contacts
+    with hide('running', 'stdout'):
+        result = run('curl http://localhost:9114')
+    result = result.find('Digidisk - Contacts')
+    if result == -1:
+        print colored('Contact installing failed', 'red')
+    else:
+        # Check Photos
+        with hide('running', 'stdout'):
+            result = run('curl http://localhost:9119')
+        result = result.find('Digidisk - Photos')
+        if result == -1:
+            print colored('Photo installing failed', 'red')
+        else:
+            run('cozy-monitor status')
+            print colored('Stack successfully updated', 'green')
     
+def update_version_photos_contacts(username, password):
+    # Install contacts
+    sudo('cozy-monitor install contacts -b photos')
+    # Install photos
+    sudo('cozy-monitor install photos -b feature/photos')
+    # Restart all apps
+    sudo('cozy-monitor restart data-system')
+    sudo('cozy-monitor restart home')
+    sudo('cozy-monitor restart proxy')
+    sudo('cozy-monitor restart contacts')
+    sudo('cozy-monitor restart photos')
+    # Check Contacts
+    with hide('running', 'stdout'):
+        result = run('curl http://localhost:9114')
+    result = result.find('Digidisk - Contacts')
+    if result == -1:
+        print colored('Contact installing failed', 'red')
+    else:
+        # Check Photos
+        with hide('running', 'stdout'):
+            result = run('curl http://localhost:9119')
+        result = result.find('Digidisk - Photos')
+        if result == -1:
+            print colored('Photo installing failed', 'red')
+        else:
+            run('cozy-monitor status')
+            print colored('Stack successfully updated', 'green')
+
+def update_version_photos_photos(username, password):
+    # Install photos
+    sudo('cozy-monitor install photos -b feature/photos')
+    # Restart all apps
+    sudo('cozy-monitor restart data-system')
+    sudo('cozy-monitor restart home')
+    sudo('cozy-monitor restart proxy')
+    sudo('cozy-monitor restart contacts')
+    sudo('cozy-monitor restart photos')
+    # Check Contacts
+    with hide('running', 'stdout'):
+        result = run('curl http://localhost:9114')
+    result = result.find('Digidisk - Contacts')
+    if result == -1:
+        print colored('Contact installing failed', 'red')
+    else:
+        # Check Photos
+        with hide('running', 'stdout'):
+            result = run('curl http://localhost:9119')
+        result = result.find('Digidisk - Photos')
+        if result == -1:
+            print colored('Photo installing failed', 'red')
+        else:
+            run('cozy-monitor status')
+            print colored('Stack successfully updated', 'green')
