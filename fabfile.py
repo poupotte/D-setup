@@ -12,7 +12,7 @@ Utilities to manage digidisk trough ssh
 # fab -H testeur-0X.digidisk.fr:17224 function:arg1,arg2
 # fab -H testeur-0X.digidisk.fr:17224 set_domain:testeur-0X.digidisk.fr
 
-env.user = 'root'
+env.user = 'cubie'
 
 ## Configuration
 
