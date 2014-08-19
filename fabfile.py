@@ -119,9 +119,7 @@ def install_stack():
 
 def npm(app, repo):
     with cd('/usr/local/cozy/apps/%s/%s/digidisk-%s'%(app, app, repo)):
-        sudo('su cozy-%s'%app)
-        run('npm install jade')
-        run('exit')
+        sudo('su cozy-%s -c "npm install jade"' % (app)
 
 
 ## Update
