@@ -117,6 +117,12 @@ def install_stack():
             else:
                 print colored('Stack successfully installed', 'green')
 
+def npm(app, repo):
+    with cd('/usr/local/cozy/apps/%s/%s/digidisk-%s'%(app, app, repo)):
+        sudo('su cozy-%s'%app)
+        run('npm install jade')
+        run('exit')
+
 
 ## Update
 
@@ -196,6 +202,9 @@ def update_version_contacts(username, password):
     sudo('cozy-monitor install proxy -b feature/contacts')
     # Install contacts
     sudo('cozy-monitor install contacts')
+    #Chekc npm for jade
+    npm('home', 'files')
+    npm('contacts', 'contacts')
     # Restart all apps
     sudo('cozy-monitor restart data-system')
     sudo('cozy-monitor restart home')
@@ -231,6 +240,10 @@ def update_version_photos(username, password):
     sudo('cozy-monitor install contacts -b photos')
     # Install photos
     sudo('cozy-monitor install photos -b feature/photos')
+    #Chekc npm for jade
+    npm('home', 'files')
+    npm('contacts', 'contacts')
+    npm('photos', 'photos')
     # Restart all apps
     sudo('cozy-monitor restart data-system')
     sudo('cozy-monitor restart home')
@@ -254,7 +267,7 @@ def update_version_photos(username, password):
             run('cozy-monitor status')
             print colored('Stack successfully updated', 'green')
 
-def update_version_photos_home(username, password):
+def update_version_photos_home():
     # Update home
     sudo('cozy-monitor install home -b feature/photos')
     # Update proxy
@@ -263,6 +276,10 @@ def update_version_photos_home(username, password):
     sudo('cozy-monitor install contacts -b photos')
     # Install photos
     sudo('cozy-monitor install photos -b feature/photos')
+    #Chekc npm for jade
+    npm('home', 'files')
+    npm('contacts', 'contacts')
+    npm('photos', 'photos')
     # Restart all apps
     sudo('cozy-monitor restart data-system')
     sudo('cozy-monitor restart home')
@@ -286,13 +303,17 @@ def update_version_photos_home(username, password):
             run('cozy-monitor status')
             print colored('Stack successfully updated', 'green')
 
-def update_version_photos_proxy(username, password):
+def update_version_photos_proxy():
     # Update proxy
     sudo('cozy-monitor install proxy -b feature/contacts')
     # Install contacts
     sudo('cozy-monitor install contacts -b photos')
     # Install photos
     sudo('cozy-monitor install photos -b feature/photos')
+    #Chekc npm for jade
+    npm('home', 'files')
+    npm('contacts', 'contacts')
+    npm('photos', 'photos')
     # Restart all apps
     sudo('cozy-monitor restart data-system')
     sudo('cozy-monitor restart home')
@@ -316,11 +337,15 @@ def update_version_photos_proxy(username, password):
             run('cozy-monitor status')
             print colored('Stack successfully updated', 'green')
     
-def update_version_photos_contacts(username, password):
+def update_version_photos_contacts():
     # Install contacts
     sudo('cozy-monitor install contacts -b photos')
     # Install photos
     sudo('cozy-monitor install photos -b feature/photos')
+    #Chekc npm for jade
+    npm('home', 'files')
+    npm('contacts', 'contacts')
+    npm('photos', 'photos')
     # Restart all apps
     sudo('cozy-monitor restart data-system')
     sudo('cozy-monitor restart home')
@@ -344,9 +369,41 @@ def update_version_photos_contacts(username, password):
             run('cozy-monitor status')
             print colored('Stack successfully updated', 'green')
 
-def update_version_photos_photos(username, password):
+def update_version_photos_photos():
     # Install photos
     sudo('cozy-monitor install photos -b feature/photos')
+    #Chekc npm for jade
+    npm('home', 'files')
+    npm('contacts', 'contacts')
+    npm('photos', 'photos')
+    # Restart all apps
+    sudo('cozy-monitor restart data-system')
+    sudo('cozy-monitor restart home')
+    sudo('cozy-monitor restart proxy')
+    sudo('cozy-monitor restart contacts')
+    sudo('cozy-monitor restart photos')
+    # Check Contacts
+    with hide('running', 'stdout'):
+        result = run('curl http://localhost:9114')
+    result = result.find('Digidisk - Contacts')
+    if result == -1:
+        print colored('Contact installing failed', 'red')
+    else:
+        # Check Photos
+        with hide('running', 'stdout'):
+            result = run('curl http://localhost:9119')
+        result = result.find('Digidisk - Photos')
+        if result == -1:
+            print colored('Photo installing failed', 'red')
+        else:
+            run('cozy-monitor status')
+            print colored('Stack successfully updated', 'green')
+
+def update_version_photos_after_install():
+    #Check npm for jade
+    npm('home', 'files')
+    npm('contacts', 'contacts')
+    npm('photos', 'photos')
     # Restart all apps
     sudo('cozy-monitor restart data-system')
     sudo('cozy-monitor restart home')
