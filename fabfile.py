@@ -424,3 +424,14 @@ def update_version_photos_after_install():
         else:
             run('cozy-monitor status')
             print colored('Stack successfully updated', 'green')
+
+
+def display_DS():
+    run('cat /usr/local/cozy/apps/data-system/data-system/digidisk-data-system/log/production.log') 
+
+def display_devices():
+    with hide('running', 'stdout'):
+        result = sudo('cat /etc/cozy/couchdb.login')
+        login = result.split()
+    run('curl http://%s:%s@localhost:5984/cozy/_design/device/_view/all' %(login[0], login[1]))
+    run('history -c && history -w')
